@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "./utils/store";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import Orders from "./pages/Orders";
 const paypalGatewayKey = import.meta.env.ECOMMERCE_PAYMENT_KEY;
 
 const App = () => {
@@ -37,6 +38,10 @@ const App = () => {
         {
           path: "/signup",
           element: <Signup />,
+        },
+        {
+          path: "/orders",
+          element: <Orders />,
         },
       ],
     },

@@ -8,4 +8,16 @@ const signInUser = (userData) => apiClient.post("/user/signin", userData);
 
 const signUpUser = (userData) => apiClient.post("/user/signup", userData);
 
-export { fetchProductCategory, fetchShopItems, signInUser, signUpUser };
+const createOrderService = (orderDetails) =>
+  apiClient.post("/order/create", orderDetails);
+
+const fetchUserOrderService = (userId) => apiClient.get(`/order/${userId}`);
+
+export {
+  fetchProductCategory,
+  fetchShopItems,
+  signInUser,
+  signUpUser,
+  createOrderService,
+  fetchUserOrderService,
+};

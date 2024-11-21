@@ -1,12 +1,17 @@
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { resetCart } from "../store/cart-slice";
+import { createOrderAsyncThunk } from "../store/order-slice";
 
 const Checkout = ({ totalProducts, grandTotal }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated, loggedInUser } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
 
-  const createOrder = (data, actions) => {
+  const createOrder = (_, actions) => {
     return actions.order.create({
       purchase_units: [
         {
@@ -18,11 +23,28 @@ const Checkout = ({ totalProducts, grandTotal }) => {
     });
   };
 
-  const onApprove = (data, actions) => {
+  const onApprove = (_, actions) => {
     return actions.order.capture().then((details) => {
-      console.log(details);
-      const name = details.payer.name.given_name;
-      alert("success");
+      const orderDetails = {
+        userId: loggedInUser?._id,
+        transactionId: details?.id,
+        transactionTime: details?.create_time,
+        status: details?.status,
+        transactionAmount: details?.purchase_units[0]?.amount?.value,
+        currencyCode: details?.purchase_units[0]?.amount?.currency_code,
+        payerName: details?.payer?.name?.given_name,
+        payerEmail: details?.payer?.email_address,
+        payerId: details?.payer?.payer_id,
+        orderedItems: cartItems?.map((cartItem) => ({
+          productId: cartItem._id,
+          price: cartItem?.price,
+          quantity: cartItem?.quantity,
+        })),
+      };
+      dispatch(createOrderAsyncThunk(orderDetails)).then(() => {
+        dispatch(resetCart());
+        navigate("/orders");
+      });
     });
   };
 

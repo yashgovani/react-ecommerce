@@ -31,6 +31,7 @@ const authSlice = createSlice({
     loading: false,
     isAuthenticated: false,
     loggedInUser: {
+      _id: "",
       displayName: "",
       email: "",
       password: "",

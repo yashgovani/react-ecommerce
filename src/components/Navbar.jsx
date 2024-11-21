@@ -7,27 +7,35 @@ import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
-import Logo from "../assets/crown.svg?react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutHandler } from "../store/auth-slice";
+import { resetUserOrder } from "../store/order-slice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { cartItems } = useSelector((state) => state.cart);
   const { isAuthenticated, loggedInUser } = useSelector((state) => state.auth);
 
   const onLogoutClickHandler = () => {
     dispatch(logoutHandler());
+    dispatch(resetUserOrder());
+    if (location.pathname?.includes("orders")) {
+      navigate("/");
+    }
   };
 
   return (
     <div className="navbar bg-soft-yellow">
       <div className="flex-1">
-        <button className="btn bg-dark-brown border-none text-pale-lavender hover:bg-pale-lavender hover:text-dark-brown">
+        <Link
+          to="/"
+          className="btn bg-dark-brown border-none text-pale-lavender hover:bg-pale-lavender hover:text-dark-brown"
+        >
           <FontAwesomeIcon icon={faCrown} />
           <span>Crown Clothing</span>
-        </button>
-        {/* <Logo className="text-deep-red" /> */}
+        </Link>
       </div>
       <div className="flex gap-x-2">
         <NavLink
@@ -46,6 +54,16 @@ const Navbar = () => {
         >
           Shop
         </NavLink>
+        {isAuthenticated && (
+          <NavLink
+            to={"/orders"}
+            className={({ isActive }) =>
+              isActive ? "btn ecommerce-btn-active" : "btn ecommerce-btn"
+            }
+          >
+            Orders
+          </NavLink>
+        )}
         <NavLink
           className={({ isActive }) =>
             isActive ? "btn ecommerce-btn-active" : "btn ecommerce-btn"

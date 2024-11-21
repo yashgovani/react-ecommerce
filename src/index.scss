@@ -75,13 +75,20 @@ body {
           }
         }
       }
-    }
-  }
 
-  .buttons-container {
-    min-width: 100% !important;
-    .paypal-button-container {
-      min-width: 100% !important;
+      .order-card-badge-success {
+        background-color: #28a745;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 12px;
+      }
+
+      .order-card-badge-failed {
+        background-color: #dc3545;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 12px;
+      }
     }
   }
 }
