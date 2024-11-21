@@ -11,7 +11,6 @@ const cartSlice = createSlice({
       state.cartItems = [...state.cartItems, action.payload];
     },
     updateCartItem: (state, action) => {
-      console.log(action.payload);
       state.cartItems = [...action.payload];
     },
   },

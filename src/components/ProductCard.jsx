@@ -1,23 +1,53 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartItem, updateCartItem } from "../store/cart-slice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Assuming you have faTrash imported
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
 
+  // Find cart item index once and store it
+  const cartItemIndex = cartItems.findIndex((item) => item._id === product._id);
+  const cartItem = cartItems[cartItemIndex];
+
   const addToCartItemHandler = (product) => {
-    const index = cartItems.findIndex((item) => item._id === product._id);
-    if (index === -1) {
+    if (cartItemIndex === -1) {
+      // If item doesn't exist in the cart, add it
       dispatch(addCartItem({ ...product, quantity: 1 }));
     } else {
-      const cartData = [...cartItems];
+      // If item exists, update it
       const updatedItem = {
-        ...cartData[index],
-        quantity: cartData[index]?.quantity + 1,
+        ...cartItem,
+        quantity: cartItem?.quantity + 1,
       };
-      cartData[index] = updatedItem;
+      const cartData = [...cartItems];
+      cartData[cartItemIndex] = updatedItem;
       dispatch(updateCartItem(cartData));
+    }
+  };
+
+  const onQuantityChangeHandler = (cartItem, action) => {
+    // Adjust quantity based on action (increase, decrease, or delete)
+    const updatedItem = {
+      ...cartItem,
+      quantity:
+        action === "increase"
+          ? cartItem.quantity + 1
+          : action === "decrease"
+          ? cartItem.quantity - 1
+          : 0,
+    };
+
+    if (action === "delete" || updatedItem.quantity <= 0) {
+      const updatedCart = cartItems.filter((item) => item._id !== cartItem._id);
+      dispatch(updateCartItem(updatedCart));
+    } else {
+      // Update item with new quantity
+      const updatedCart = [...cartItems];
+      updatedCart[cartItemIndex] = updatedItem;
+      dispatch(updateCartItem(updatedCart));
     }
   };
 
@@ -35,12 +65,39 @@ const ProductCard = ({ product }) => {
         <p className="text-sm leading-5 truncate">{product?.name}</p>
         <p className="text-sm leading-5 truncate">{`$ ${product?.price}`}</p>
       </div>
-      <button
-        className="ecommerce-btn w-[100%] p-3 rounded-md font-bold"
-        onClick={() => addToCartItemHandler(product)}
-      >
-        Add To Cart
-      </button>
+      {cartItem ? (
+        <div className="flex justify-between items-center">
+          {cartItem.quantity === 1 ? (
+            <button
+              className="btn ecommerce-btn"
+              onClick={() => onQuantityChangeHandler(cartItem, "delete")}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          ) : (
+            <button
+              className="btn ecommerce-btn"
+              onClick={() => onQuantityChangeHandler(cartItem, "decrease")}
+            >
+              -
+            </button>
+          )}
+          <h6>{cartItem.quantity}</h6>
+          <button
+            className="btn ecommerce-btn rounded-btn"
+            onClick={() => onQuantityChangeHandler(cartItem, "increase")}
+          >
+            +
+          </button>
+        </div>
+      ) : (
+        <button
+          className="ecommerce-btn w-[100%] p-3 rounded-md font-bold"
+          onClick={() => addToCartItemHandler(product)}
+        >
+          Add To Cart
+        </button>
+      )}
     </div>
   );
 };

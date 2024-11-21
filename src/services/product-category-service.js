@@ -4,4 +4,8 @@ const fetchProductCategory = () => apiClient.get("/product-category");
 
 const fetchShopItems = () => apiClient.get("/shop-items");
 
-export { fetchProductCategory, fetchShopItems };
+const signInUser = (userData) => apiClient.post("/user/signin", userData);
+
+const signUpUser = (userData) => apiClient.post("/user/signup", userData);
+
+export { fetchProductCategory, fetchShopItems, signInUser, signUpUser };

@@ -2,11 +2,13 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./pages/Layout";
 import ProductCategory from "./pages/ProductCategory";
-import store from "./utils/store";
 import { Provider } from "react-redux";
 import ShopItems from "./pages/ShopItems";
 import CartItems from "./pages/CartItems";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import { PersistGate } from "redux-persist/integration/react";
+import store, { persistor } from "./utils/store";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
         path: "/login",
         element: <Login />,
       },
+      {
+        path: "/signup",
+        element: <Signup />,
+      },
     ],
   },
 ]);
@@ -36,10 +42,10 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <>
-      {/* <Navbar />
-      <div className="ecom-container"></div> */}
       <Provider store={store}>
-        <RouterProvider router={router} />
+        <PersistGate loading={null} persistor={persistor}>
+          <RouterProvider router={router} />
+        </PersistGate>
       </Provider>
     </>
   );

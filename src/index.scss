@@ -35,6 +35,11 @@ body {
       color: theme("colors.rich-pink");
     }
   }
+  .ecommerce-btn-active {
+    background-color: theme("colors.pale-lavender");
+    color: theme("colors.rich-pink");
+    border: none;
+  }
 
   main {
     height: 85%;

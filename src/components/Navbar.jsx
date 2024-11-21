@@ -1,14 +1,23 @@
-import React from "react";
-import Logo from "../assets/crown.svg?react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCartShopping,
+  faRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import Logo from "../assets/crown.svg?react";
+import { logoutHandler } from "../store/auth-slice";
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, loggedInUser } = useSelector((state) => state.auth);
+
+  const onLogoutClickHandler = () => {
+    dispatch(logoutHandler());
+  };
 
   return (
     <div className="navbar bg-soft-yellow">
@@ -16,44 +25,56 @@ const Navbar = () => {
         <Logo className="text-deep-red" />
       </div>
       <div className="flex gap-x-2">
-        <Link to={"/"} className="btn ecommerce-btn">
+        <NavLink
+          to={"/"}
+          className={({ isActive }) =>
+            isActive ? "btn ecommerce-btn-active" : "btn ecommerce-btn"
+          }
+        >
           Product Category
-        </Link>
-        <Link to={"/shop-item"} className="btn ecommerce-btn">
+        </NavLink>
+        <NavLink
+          to={"/shop-item"}
+          className={({ isActive }) =>
+            isActive ? "btn ecommerce-btn-active" : "btn ecommerce-btn"
+          }
+        >
           Shop
-        </Link>
-        <button
-          className="btn ecommerce-btn"
-          disabled={!cartItems.length}
-          onClick={() => navigate("/cart")}
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "btn ecommerce-btn-active" : "btn ecommerce-btn"
+          }
+          to={"/cart"}
         >
           <div className="indicator">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+            <FontAwesomeIcon
+              icon={faCartShopping}
               fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
+              className="h-5 w-5"
+            />
             <span className="badge badge-sm indicator-item">
               {cartItems?.length}
             </span>
           </div>
-        </button>
-        <button
-          className="btn ecommerce-btn"
-          onClick={() => navigate("/login")}
-        >
-          <FontAwesomeIcon icon={faUser} />
-          <span>{isAuthenticated ? "Yash Govani" : "Login"}</span>
-        </button>
+        </NavLink>
+
+        {isAuthenticated ? (
+          <button className="btn ecommerce-btn" onClick={onLogoutClickHandler}>
+            <span>{loggedInUser.displayName}</span>
+            <FontAwesomeIcon icon={faRightFromBracket} />
+          </button>
+        ) : (
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "btn ecommerce-btn-active" : "btn ecommerce-btn"
+            }
+            to={"/login"}
+          >
+            <FontAwesomeIcon icon={faUser} />
+            <span>Login</span>
+          </NavLink>
+        )}
       </div>
     </div>
   );

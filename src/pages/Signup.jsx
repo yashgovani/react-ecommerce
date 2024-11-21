@@ -2,16 +2,19 @@ import React from "react";
 import { useForm, useFormState } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { signInUserAsyncThunk } from "../store/auth-slice";
+import {
+  signInUserAsyncThunk,
+  signUpUserAsyncThunk,
+} from "../store/auth-slice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faKey } from "@fortawesome/free-solid-svg-icons/faKey";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons/faEnvelope";
+import { faEnvelope, faUser, faKey } from "@fortawesome/free-solid-svg-icons";
 
-const Login = () => {
-  const dispatch = useDispatch();
+const Signup = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
+      displayName: "",
       email: "",
       password: "",
     },
@@ -22,20 +25,40 @@ const Login = () => {
   });
 
   const onLoginClick = (data) => {
-    const { email, password } = data;
-    dispatch(signInUserAsyncThunk({ email, password })).then(() => {
-      navigate("/");
-    });
+    const { displayName, email, password } = data;
+    dispatch(signUpUserAsyncThunk({ displayName, email, password })).then(
+      () => {
+        navigate("/");
+      }
+    );
   };
 
   return (
     <div className="ecom-container flex items-center justify-center">
       <div className="card w-96 bg-pale-lavender shadow-xl">
         <div className="card-body">
-          <h2 className="card-title text-2xl text-dark-brown font-bold">
-            Login
-          </h2>
           <form onSubmit={handleSubmit(onLoginClick)}>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">User Name</span>
+              </label>
+              <label className="input input-bordered flex items-center gap-2">
+                <FontAwesomeIcon icon={faUser} className="w-4 h-4 opacity-70" />
+                <input
+                  type="text"
+                  className="grow"
+                  placeholder="User Name"
+                  {...register("displayName", {
+                    required: "User name is Required",
+                  })}
+                />
+              </label>
+              {errors.displayName && (
+                <p className="text-deep-red text-xs mt-1">
+                  {errors.displayName.message}
+                </p>
+              )}
+            </div>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -73,7 +96,7 @@ const Login = () => {
                 <input
                   type="password"
                   className="grow"
-                  placeholder="Enter password"
+                  placeholder="*************"
                   {...register("password", {
                     required: "Password is Required",
                   })}
@@ -87,14 +110,14 @@ const Login = () => {
             </div>
             <div className="form-control mt-3">
               <button className="btn ecommerce-btn" type="submit">
-                Login
+                Sign Up
               </button>
             </div>
           </form>
           <div className="text-center">
-            <p>Don't have an account?</p>
-            <Link to={"/signup"} className="link link-primary">
-              Sign up now
+            <p>Already have an account?</p>
+            <Link to={"/login"} className="link link-primary">
+              Back to Login
             </Link>
           </div>
         </div>
@@ -103,4 +126,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
