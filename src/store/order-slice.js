@@ -57,7 +57,6 @@ const cartSlice = createSlice({
       })
       .addCase(fetchUserOrderAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(action.payload);
         state.orders = [...action.payload?.orders];
       })
       .addCase(fetchUserOrderAsyncThunk.rejected, (state) => {

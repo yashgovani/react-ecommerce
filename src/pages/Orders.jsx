@@ -8,7 +8,7 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons/faCircleE
 const Orders = () => {
   const dispatch = useDispatch();
   const { loggedInUser } = useSelector((state) => state.auth);
-  const { orders } = useSelector((state) => state.cart);
+  const { orders } = useSelector((state) => state.order);
 
   useEffect(() => {
     if (loggedInUser?._id) {
