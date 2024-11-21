@@ -2,10 +2,16 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CartCard from "../components/CartCard";
 import { updateCartItem } from "../store/cart-slice";
+import Checkout from "../components/Checkout";
 
 const CartItems = () => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
+
+  const totalProducts = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const grandTotal = cartItems
+    .reduce((acc, item) => acc + item.quantity * item.price, 0)
+    .toFixed(2);
 
   const onQuantityChangeHandler = (product, action) => {
     const index = cartItems.findIndex((item) => item._id === product._id);
@@ -41,6 +47,9 @@ const CartItems = () => {
           );
         })}
       </div>
+      {cartItems.length > 0 && (
+        <Checkout totalProducts={totalProducts} grandTotal={grandTotal} />
+      )}
     </div>
   );
 };

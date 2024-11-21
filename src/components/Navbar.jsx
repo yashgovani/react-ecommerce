@@ -1,5 +1,6 @@
 import {
   faCartShopping,
+  faCrown,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
@@ -22,7 +23,11 @@ const Navbar = () => {
   return (
     <div className="navbar bg-soft-yellow">
       <div className="flex-1">
-        <Logo className="text-deep-red" />
+        <button className="btn bg-dark-brown border-none text-pale-lavender hover:bg-pale-lavender hover:text-dark-brown">
+          <FontAwesomeIcon icon={faCrown} />
+          <span>Crown Clothing</span>
+        </button>
+        {/* <Logo className="text-deep-red" /> */}
       </div>
       <div className="flex gap-x-2">
         <NavLink

@@ -77,4 +77,11 @@ body {
       }
     }
   }
+
+  .buttons-container {
+    min-width: 100% !important;
+    .paypal-button-container {
+      min-width: 100% !important;
+    }
+  }
 }

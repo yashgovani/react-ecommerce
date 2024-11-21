@@ -9,43 +9,52 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "./utils/store";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <ProductCategory />,
-      },
-      {
-        path: "/shop-item",
-        element: <ShopItems />,
-      },
-      {
-        path: "/cart",
-        element: <CartItems />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/signup",
-        element: <Signup />,
-      },
-    ],
-  },
-]);
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+const paypalGatewayKey = import.meta.env.ECOMMERCE_PAYMENT_KEY;
 
 const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          index: true,
+          element: <ProductCategory />,
+        },
+        {
+          path: "/shop-item",
+          element: <ShopItems />,
+        },
+        {
+          path: "/cart",
+          element: <CartItems />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/signup",
+          element: <Signup />,
+        },
+      ],
+    },
+  ]);
+
   return (
     <>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <RouterProvider router={router} />
-        </PersistGate>
+        <PayPalScriptProvider
+          options={{
+            clientId: paypalGatewayKey,
+            disableFunding: "credit,card",
+          }}
+        >
+          <PersistGate loading={null} persistor={persistor}>
+            <RouterProvider router={router} />
+          </PersistGate>
+        </PayPalScriptProvider>
       </Provider>
     </>
   );

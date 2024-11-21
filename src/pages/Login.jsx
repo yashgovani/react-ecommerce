@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm, useFormState } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signInUserAsyncThunk } from "../store/auth-slice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey } from "@fortawesome/free-solid-svg-icons/faKey";
@@ -10,6 +10,8 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons/faEnvelope";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
       email: "",
@@ -24,7 +26,11 @@ const Login = () => {
   const onLoginClick = (data) => {
     const { email, password } = data;
     dispatch(signInUserAsyncThunk({ email, password })).then(() => {
-      navigate("/");
+      if (location?.state?.from) {
+        navigate(`/${location?.state?.from}`);
+      } else {
+        navigate("/");
+      }
     });
   };
 
