@@ -1,11 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const CategoryCard = ({ category }) => {
+  const navigate = useNavigate();
   return (
     <>
       <button
         key={category?._id}
         className="bg-pale-lavender rounded-lg p-3 text-center menu-item"
+        onClick={() => navigate("/shop-item")}
       >
         <img
           src={category?.imageUrl}

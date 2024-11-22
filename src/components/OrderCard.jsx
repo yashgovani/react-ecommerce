@@ -24,7 +24,7 @@ const OrderCard = ({ order }) => {
       : "order-card-badge-failed";
 
   return (
-    <div className="order-card p-4 mb-6 bg-white rounded shadow-md">
+    <div className="order-card p-4 mb-6 bg-pale-lavender rounded shadow-md">
       {/* Transaction Status Badge */}
 
       <div className="order-header flex justify-between items-center mb-4">

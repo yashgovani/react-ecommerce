@@ -4,11 +4,12 @@ import OrderCard from "../components/OrderCard";
 import { fetchUserOrderAsyncThunk } from "../store/order-slice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons/faCircleExclamation";
+import Loader from "../components/Loader";
 
 const Orders = () => {
   const dispatch = useDispatch();
   const { loggedInUser } = useSelector((state) => state.auth);
-  const { orders } = useSelector((state) => state.order);
+  const { orders, loading } = useSelector((state) => state.order);
 
   useEffect(() => {
     if (loggedInUser?._id) {
@@ -21,7 +22,7 @@ const Orders = () => {
       <div className="header">
         <h2>Orders</h2>
       </div>
-      {/* Display orders */}
+      {loading && <Loader />}
       {orders.length === 0 ? (
         <div className="flex items-center justify-center h-[80%]">
           <FontAwesomeIcon icon={faCircleExclamation} />

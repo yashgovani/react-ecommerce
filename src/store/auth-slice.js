@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { signInUser, signUpUser } from "../services/product-category-service";
+import { successToast } from "../services/toast-service";
 
 export const signInUserAsyncThunk = createAsyncThunk(
   "signInUserAsyncThunk",
@@ -56,6 +57,7 @@ const authSlice = createSlice({
       })
       .addCase(signInUserAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
+        successToast(action.payload?.message);
         state.isAuthenticated =
           action.payload.status === "success" ? true : false;
         state.loggedInUser = { ...state.loggedInUser, ...action.payload.user };
@@ -68,6 +70,7 @@ const authSlice = createSlice({
       })
       .addCase(signUpUserAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
+        successToast(action.payload?.message);
         state.isAuthenticated =
           action.payload.status === "success" ? true : false;
         state.loggedInUser = { ...state.loggedInUser, ...action.payload.user };

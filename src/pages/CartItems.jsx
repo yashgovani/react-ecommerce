@@ -3,10 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import CartCard from "../components/CartCard";
 import { updateCartItem } from "../store/cart-slice";
 import Checkout from "../components/Checkout";
+import Loader from "../components/Loader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons/faCircleExclamation";
 
 const CartItems = () => {
   const dispatch = useDispatch();
-  const { cartItems } = useSelector((state) => state.cart);
+  const { cartItems, loading } = useSelector((state) => state.cart);
 
   const totalProducts = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const grandTotal = cartItems
@@ -36,17 +39,27 @@ const CartItems = () => {
       <div className="header">
         <h2>Cart Items</h2>
       </div>
-      <div className="grid sm:grid-cols-3 md:grid-cols-5 gap-4 items-center">
-        {cartItems?.map((cartItem) => {
-          return (
-            <CartCard
-              cartItem={cartItem}
-              onQuantityChangeHandler={onQuantityChangeHandler}
-              key={cartItem._id}
-            />
-          );
-        })}
-      </div>
+      {loading && <Loader />}
+      {cartItems.length === 0 ? (
+        <div className="flex items-center justify-center h-[80%]">
+          <FontAwesomeIcon icon={faCircleExclamation} />
+          <span className=" text-dark-brown font-semibold text-xl ml-2">
+            No items present in the cart.
+          </span>
+        </div>
+      ) : (
+        <div className="grid sm:grid-cols-3 md:grid-cols-5 gap-4 items-center">
+          {cartItems?.map((cartItem) => {
+            return (
+              <CartCard
+                cartItem={cartItem}
+                onQuantityChangeHandler={onQuantityChangeHandler}
+                key={cartItem._id}
+              />
+            );
+          })}
+        </div>
+      )}
       {cartItems.length > 0 && (
         <Checkout totalProducts={totalProducts} grandTotal={grandTotal} />
       )}

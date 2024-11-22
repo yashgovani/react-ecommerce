@@ -3,6 +3,7 @@ import {
   createOrderService,
   fetchUserOrderService,
 } from "../services/product-category-service";
+import { successToast } from "../services/toast-service";
 
 export const createOrderAsyncThunk = createAsyncThunk(
   "createOrderAsyncThunk",
@@ -47,6 +48,7 @@ const cartSlice = createSlice({
       })
       .addCase(createOrderAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
+        successToast(action.payload?.message);
         state.orders = [...state.orders, action.payload?.order];
       })
       .addCase(createOrderAsyncThunk.rejected, (state) => {
@@ -57,6 +59,7 @@ const cartSlice = createSlice({
       })
       .addCase(fetchUserOrderAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
+        successToast(action.payload?.message);
         state.orders = [...action.payload?.orders];
       })
       .addCase(fetchUserOrderAsyncThunk.rejected, (state) => {

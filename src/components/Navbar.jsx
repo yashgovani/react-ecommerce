@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutHandler } from "../store/auth-slice";
 import { resetUserOrder } from "../store/order-slice";
+import { successToast } from "../services/toast-service";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const Navbar = () => {
   const onLogoutClickHandler = () => {
     dispatch(logoutHandler());
     dispatch(resetUserOrder());
+    successToast("Successfully logged out");
     if (location.pathname?.includes("orders")) {
       navigate("/");
     }
