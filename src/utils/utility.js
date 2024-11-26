@@ -1,7 +1,8 @@
 import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL:
+    "https://ecommerce-crown-clothing-api.netlify.app/.netlify/functions/api",
   headers: {
     "Content-Type": "application/json",
   },
