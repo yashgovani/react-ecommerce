@@ -6,7 +6,7 @@ const Loader = () => {
     >
       <div
         data-testid="test-spinner"
-        className="border-[0.25rem] border-transparent rounded-[50%] border-t-[0.25rem] border-t-primary border-r-[0.25rem] border-r-primary border-b-[0.25rem] border-b-primary w-10 h-10 animate-spin-slow"
+        className="border-[0.25rem] border-transparent rounded-[50%] border-t-[0.25rem] border-t-dark-brown border-r-[0.25rem] border-r-dark-brown border-b-[0.25rem] border-b-dark-brown w-10 h-10 animate-spin"
       ></div>
     </div>
   );
